@@ -90,34 +90,24 @@ if (!$recordid && count($records) > 1) {
     // Columns and headers.
     $table->define_columns([
         'userid',
-        'joined',
-        'left',
         'duration',
         'talk_time',
         'chats',
         'talks',
-        'raisehand',
-        'emojis',
         'poll_votes',
     ]);
     $table->define_headers([
         get_string('table:participant', 'local_bbb_lad'),
-        get_string('table:joined', 'local_bbb_lad'),
-        get_string('table:left', 'local_bbb_lad'),
         get_string('table:duration', 'local_bbb_lad'),
         get_string('table:talk_time', 'local_bbb_lad'),
         get_string('table:chats', 'local_bbb_lad'),
         get_string('table:talks', 'local_bbb_lad'),
-        get_string('table:raisehand', 'local_bbb_lad'),
-        get_string('table:emojis', 'local_bbb_lad'),
         get_string('table:poll_votes', 'local_bbb_lad'),
     ]);
     $table->column_class('duration', 'text-right');
     $table->column_class('talk_time', 'text-right');
     $table->column_class('chats', 'text-right');
     $table->column_class('talks', 'text-right');
-    $table->column_class('raisehand', 'text-right');
-    $table->column_class('emojis', 'text-right');
     $table->column_class('poll_votes', 'text-right');
 
     $table->define_baseurl($PAGE->url);
@@ -142,15 +132,11 @@ if (!$recordid && count($records) > 1) {
     $attendees = $data['data']['attendees'];
     foreach ($attendees as $attendee) {
         $table->add_data([
-            table::userlink($attendee['ext_user_id']),
-            table::list_dates($attendee['joins']),
-            table::list_dates($attendee['leaves']),
-            format_time((int)$attendee['duration']),
-            format_time($attendee['engagement']['talk_time']),
+            table::userlink($attendee),
+            table::format_time((int)$attendee['duration']),
+            table::format_time((int)$attendee['engagement']['talk_time']),
             $attendee['engagement']['chats'],
             $attendee['engagement']['talks'],
-            $attendee['engagement']['raisehand'],
-            $attendee['engagement']['emojis'],
             $attendee['engagement']['poll_votes'],
         ]);
     }
@@ -163,7 +149,4 @@ if (!$recordid && count($records) > 1) {
 
         echo $OUTPUT->footer();
     }
-
 }
-
-

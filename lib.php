@@ -23,8 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Extend settings navigation
  *
@@ -34,12 +32,12 @@ defined('MOODLE_INTERNAL') || die();
 function local_bbb_lad_extend_settings_navigation(settings_navigation $settingsnav, context $context) {
     global $PAGE;
 
-    // Only on module pages
+    // Only on module pages.
     if ($PAGE->cm === null) {
         return;
     }
 
-    // Only for BigBlueButtonBN
+    // Only for BigBlueButtonBN.
     if ($PAGE->cm->modname !== 'bigbluebuttonbn') {
         return;
     }
@@ -50,7 +48,7 @@ function local_bbb_lad_extend_settings_navigation(settings_navigation $settingsn
 
     $url = new moodle_url('/local/bbb_lad/viewlad.php', ['cmid' => $PAGE->cm->id]);
 
-    // Find the activity settings node and add to it
+    // Find the activity settings node and add to it.
     if ($node = $settingsnav->find('modulesettings', navigation_node::TYPE_SETTING)) {
         $node->add(
             get_string('viewlad', 'local_bbb_lad'),

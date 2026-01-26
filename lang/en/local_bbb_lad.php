@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Language file for BBB Learning Analytics Dashboard.
+ *
  * @package    local_bbb_lad
  * @copyright  2026, think modular
  * @author     think modular (stefan.weber@think-modular.com)
@@ -22,7 +24,9 @@
  */
 
 $string['bbb_lad:viewlad'] = 'View BBB Learning Analytics Dashboard for an activity';
+$string['joins'] = 'joined';
 $string['lad'] = 'Learning Analytics Dashboard for {$a}';
+$string['leaves'] = 'left';
 $string['meeting'] = 'Meeting from {$a}';
 $string['norecords'] = 'No Learning Analytics Dashboard data found for this activity.';
 $string['pluginname'] = 'BBB Learning Analytics Dashboard';
@@ -34,7 +38,7 @@ $string['table:emojis'] = 'Emojis';
 $string['table:joined'] = 'Joined';
 $string['table:left'] = 'Left';
 $string['table:participant'] = 'Participant';
-$string['table:poll_votes'] = 'Poll votes';
+$string['table:poll_votes'] = 'Poll votes / quiz answers';
 $string['table:raisehand'] = 'Raise hand';
 $string['table:talk_time'] = 'Talk time';
 $string['table:talks'] = 'Talks';

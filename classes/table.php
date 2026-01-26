@@ -37,15 +37,56 @@ class table {
     /**
      * Format username.
      *
-     * @param int $userid
+     * @param array $attendee
      * @return string formatted username
      */
-    public static function userlink($userid) {
+    public static function userlink($attendee) {
+
+        global $OUTPUT;
+
+        // Print user link.
+        $userid = $attendee['ext_user_id'];
         $user = \core_user::get_user($userid);
         $username = fullname($user);
         $url = new \moodle_url('/user/profile.php', ['id' => $userid]);
-        $link = \html_writer::link($url, $username);
-        return $link;
+        $html = \html_writer::link($url, $username);
+
+        // Prepare join/leave info.
+        $types = [
+            'joins' => 'fa fa-sign-in',
+            'leaves' => 'fa fa-sign-out',
+        ];
+        $joinleaves = [];
+        foreach ($types as $key => $icon) {
+            foreach ($attendee[$key] as $entry) {
+                $timestamp = strtotime($entry);
+                $date = userdate($timestamp);
+                $joinleaves[$timestamp] = [
+                    'key' => $key,
+                    'icon' => $icon,
+                    'date' => $date,
+                ];
+            }
+        }
+        ksort($joinleaves);
+
+        // Append join/leave info to link.
+        foreach ($joinleaves as $jl) {
+            $icon = \html_writer::tag(
+                'i',
+                '',
+                [
+                    'class' => $jl['icon'] . ' me-1',
+                    'aria-hidden' => 'true',
+                    'role' => 'img',
+                    'title' => get_string($jl['key'], 'local_bbb_lad'),
+                ]
+            );
+            $text = $jl['date'];
+            $html .= \html_writer::tag('small', $icon . $text, ['class' => 'd-block']);
+        }
+
+        return $html;
     }
 
     /**
@@ -61,5 +102,18 @@ class table {
             $formatteddates[] = userdate($timestamp);
         }
         return implode(', ', $formatteddates);
+    }
+
+    /**
+     * Formats time, but returns empty string for 0.
+     *
+     * @param int $timeinseconds
+     * @return string formatted time or empty string
+     */
+    public static function format_time($timeinseconds) {
+        if ($timeinseconds == 0) {
+            return get_string('none');
+        }
+        return format_time($timeinseconds);
     }
 }

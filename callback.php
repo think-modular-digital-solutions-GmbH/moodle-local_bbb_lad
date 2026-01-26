@@ -23,9 +23,34 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// phpcs:disable moodle.Files.RequireLogin.Missing
+
 require_once('../../config.php');
 
-defined('MOODLE_INTERNAL') || die();
+// Get the configured BBB server URL.
+$serverurl = \mod_bigbluebuttonbn\local\config::get('server_url');
+$parsed = parse_url($serverurl);
+$hostname = $parsed['host'];
+if (empty($hostname)) {
+    http_response_code(500);
+    die('BBB server not configured');
+}
+
+// Resolve hostname to IP addresses.
+$serverips = gethostbynamel($hostname);
+if ($serverips === false) {
+    http_response_code(500);
+    die('Could not resolve BBB server hostname');
+}
+
+// Get the incoming request IP.
+$remoteip = $_SERVER['REMOTE_ADDR'];
+
+// Verify the request comes from the configured BBB server.
+if (!in_array($remoteip, $serverips)) {
+    http_response_code(403);
+    die('Unauthorized');
+}
 
 global $DB;
 
@@ -48,7 +73,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 // Log data.
 $record = new stdClass();
 $record->timestamp = time();
-$record->data = $data;
+$record->data = $ip;
 $record->bigbluebuttonbn = $instanceid;
 $DB->insert_record('local_bbb_lad', $record);
 

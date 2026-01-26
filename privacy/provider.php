@@ -16,8 +16,6 @@
 
 namespace local_bbb_lap\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Privacy subsystem for the local_bbb_lap plugin.
  *
