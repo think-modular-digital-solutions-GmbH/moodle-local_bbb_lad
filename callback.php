@@ -39,31 +39,6 @@ if (!$record || $record->secret !== $secret) {
     die('Unauthorized');
 }
 
-// Get the configured BBB server URL.
-$serverurl = \mod_bigbluebuttonbn\local\config::get('server_url');
-$parsed = parse_url($serverurl);
-$hostname = $parsed['host'];
-if (empty($hostname)) {
-    http_response_code(500);
-    die('BBB server not configured');
-}
-
-// Resolve hostname to IP addresses.
-$serverips = gethostbynamel($hostname);
-if ($serverips === false) {
-    http_response_code(500);
-    die('Could not resolve BBB server hostname');
-}
-
-// Get the incoming request IP.
-$remoteip = $_SERVER['REMOTE_ADDR'];
-
-// Verify the request comes from the configured BBB server.
-if (!in_array($remoteip, $serverips)) {
-    http_response_code(403);
-    die('Unauthorized');
-}
-
 // Read raw POST body.
 $raw = file_get_contents('php://input');
 
