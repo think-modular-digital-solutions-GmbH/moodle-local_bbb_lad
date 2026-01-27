@@ -25,11 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2026012703;
-$plugin->requires = 2021051700;
-$plugin->component = 'local_bbb_lad';
-$plugin->release = '1.0';
-$plugin->maturity = MATURITY_STABLE;
+$plugin->version      = 2026012703;
+$plugin->requires     = 2021051700;
+$plugin->component    = 'local_bbb_lad';
+$plugin->release      = '1.0';
+$plugin->maturity     = MATURITY_STABLE;
+$plugin->supports     = [404, 502];
 $plugin->dependencies = [
     'bbbext_lad' => 2026012701,
 ];
