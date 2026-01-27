@@ -53,7 +53,7 @@ $PAGE->set_course($course);
 $PAGE->set_cm($cm);
 
 // Get records.
-$params = ['bigbluebuttonbn' => $instanceid];
+$params = ['bigbluebuttonbnid' => $instanceid];
 if ($recordid) {
     $params['id'] = $recordid;
 }

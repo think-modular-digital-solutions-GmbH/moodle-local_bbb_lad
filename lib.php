@@ -30,7 +30,7 @@
  * @param context $context
  */
 function local_bbb_lad_extend_settings_navigation(settings_navigation $settingsnav, context $context) {
-    global $PAGE;
+    global $DB, $PAGE;
 
     // Only on module pages.
     if ($PAGE->cm === null) {
@@ -42,8 +42,19 @@ function local_bbb_lad_extend_settings_navigation(settings_navigation $settingsn
         return;
     }
 
+    // Check capability.
     if (!has_capability('local/bbb_lad:viewlad', $context)) {
         return;
+    }
+
+    // Check if enabled or data exists.
+    $data = $DB->get_records('bbbext_lad', ['bigbluebuttonbnid' => $PAGE->cm->instance]);
+    $instanceid = $PAGE->cm->instance;
+    $record = $DB->get_record('bbbext_lad', ['bigbluebuttonbnid' => $instanceid]);
+    if (!$data) {
+        if (!$record || $record->enabled == 0) {
+            return;
+        }
     }
 
     $url = new moodle_url('/local/bbb_lad/viewlad.php', ['cmid' => $PAGE->cm->id]);

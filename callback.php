@@ -27,6 +27,10 @@
 
 require_once('../../config.php');
 
+global $DB;
+
+$instanceid = required_param('instanceid', PARAM_INT);
+
 // Get the configured BBB server URL.
 $serverurl = \mod_bigbluebuttonbn\local\config::get('server_url');
 $parsed = parse_url($serverurl);
@@ -52,10 +56,6 @@ if (!in_array($remoteip, $serverips)) {
     die('Unauthorized');
 }
 
-global $DB;
-
-$instanceid = required_param('instanceid', PARAM_INT);
-
 // Read raw POST body.
 $raw = file_get_contents('php://input');
 
@@ -73,8 +73,8 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 // Log data.
 $record = new stdClass();
 $record->timestamp = time();
-$record->data = $ip;
-$record->bigbluebuttonbn = $instanceid;
+$record->data = $data;
+$record->bigbluebuttonbnid = $instanceid;
 $DB->insert_record('local_bbb_lad', $record);
 
 echo "OK";
