@@ -30,6 +30,14 @@ require_once('../../config.php');
 global $DB;
 
 $instanceid = required_param('instanceid', PARAM_INT);
+$secret = required_param('secret', PARAM_ALPHANUMEXT);
+$record = $DB->get_record('bbbext_lad', ['bigbluebuttonbnid' => $instanceid]);
+
+// Verify secret.
+if (!$record || $record->secret !== $secret) {
+    http_response_code(403);
+    die('Unauthorized');
+}
 
 // Get the configured BBB server URL.
 $serverurl = \mod_bigbluebuttonbn\local\config::get('server_url');
