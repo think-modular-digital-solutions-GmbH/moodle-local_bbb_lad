@@ -50,7 +50,19 @@ class table {
         $username = fullname($user);
         $url = new \moodle_url('/user/profile.php', ['id' => $userid]);
         $html = \html_writer::link($url, $username);
+        $html = self::joins_and_leaves($html, $attendee);
 
+        return $html;
+    }
+
+    /**
+     * Adds join and leave times to the username.
+     *
+     * @param string $html
+     * @param array $attendee
+     * @return string
+     */
+    public static function joins_and_leaves($html, $attendee) {
         // Prepare join/leave info.
         $types = [
             'joins' => 'fa fa-sign-in',
@@ -85,8 +97,22 @@ class table {
             $text = $jl['date'];
             $html .= \html_writer::tag('small', $icon . $text, ['class' => 'd-block']);
         }
-
         return $html;
+    }
+
+    /**
+     * Formats joins or leaves for download.
+     *
+     * @param array $dates joins or leaves
+     * @return string formatted dates
+     */
+    public static function format_jl_for_download($dates) {
+        $formatteddates = [];
+        foreach ($dates as $date) {
+            $timestamp = strtotime($date);
+            $formatteddates[] = userdate($timestamp);
+        }
+        return implode(', ', $formatteddates);
     }
 
     /**

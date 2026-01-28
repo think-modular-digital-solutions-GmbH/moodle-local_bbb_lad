@@ -95,22 +95,32 @@ if (!$recordid && count($records) > 1) {
     $table->is_downloading($download, $name, $name);
 
     // Columns and headers.
-    $table->define_columns([
-        'userid',
-        'duration',
-        'talk_time',
-        'chats',
-        'talks',
-        'poll_votes',
-    ]);
-    $table->define_headers([
-        get_string('table:participant', 'local_bbb_lad'),
-        get_string('table:duration', 'local_bbb_lad'),
-        get_string('table:talk_time', 'local_bbb_lad'),
-        get_string('table:chats', 'local_bbb_lad'),
-        get_string('table:talks', 'local_bbb_lad'),
-        get_string('table:poll_votes', 'local_bbb_lad'),
-    ]);
+    $cols = [];
+    $cols[] = 'userid';
+    if ($table->is_downloading()) {
+        $cols[] = 'joins';
+        $cols[] = 'leaves';
+    }
+    $cols[] = 'duration';
+    $cols[] = 'talk_time';
+    $cols[] = 'chats';
+    $cols[] = 'talks';
+    $cols[] = 'poll_votes';
+    $table->define_columns($cols);
+
+    $headers = [];
+    $headers[] = get_string('table:participant', 'local_bbb_lad');
+    if ($table->is_downloading()) {
+        $headers[] = get_string('table:joins', 'local_bbb_lad');
+        $headers[] = get_string('table:leaves', 'local_bbb_lad');
+    }
+    $headers[] = get_string('table:duration', 'local_bbb_lad');
+    $headers[] = get_string('table:talk_time', 'local_bbb_lad');
+    $headers[] = get_string('table:chats', 'local_bbb_lad');
+    $headers[] = get_string('table:talks', 'local_bbb_lad');
+    $headers[] = get_string('table:poll_votes', 'local_bbb_lad');
+    $table->define_headers($headers);
+
     $table->column_class('duration', 'text-right');
     $table->column_class('talk_time', 'text-right');
     $table->column_class('chats', 'text-right');
@@ -138,14 +148,21 @@ if (!$recordid && count($records) > 1) {
     $data = json_decode($record->data, true);
     $attendees = $data['data']['attendees'];
     foreach ($attendees as $attendee) {
-        $table->add_data([
-            table::userlink($attendee),
-            table::format_time((int)$attendee['duration']),
-            table::format_time((int)$attendee['engagement']['talk_time']),
-            $attendee['engagement']['chats'],
-            $attendee['engagement']['talks'],
-            $attendee['engagement']['poll_votes'],
-        ]);
+        $data = [];
+        if ($table->is_downloading()) {
+            $user = \core_user::get_user($attendee['ext_user_id']);
+            $data[] = fullname($user);
+            $data[] = table::format_jl_for_download($attendee['joins']);
+            $data[] = table::format_jl_for_download($attendee['leaves']);
+        } else {
+            $data[] = table::userlink($attendee);
+        }
+        $data[] = table::format_time((int)$attendee['duration']);
+        $data[] = table::format_time((int)$attendee['engagement']['talk_time']);
+        $data[] = $attendee['engagement']['chats'];
+        $data[] = $attendee['engagement']['talks'];
+        $data[] = $attendee['engagement']['poll_votes'];
+        $table->add_data($data);
     }
     $table->finish_output();
 
