@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version      = 2026012703;
+$plugin->version      = 2026012704;
 $plugin->requires     = 2021051700;
 $plugin->component    = 'local_bbb_lad';
 $plugin->release      = '1.0.1';

@@ -45,7 +45,14 @@ $instance = $DB->get_record('bigbluebuttonbn', ['id' => $instanceid], '*', MUST_
 require_capability('local/bbb_lad:viewlad', $context);
 
 // Set page.
-$url = new moodle_url('/local/bbb_lad/viewlad.php', ['instance' => $instanceid]);
+$url = new moodle_url(
+    '/local/bbb_lad/viewlad.php',
+    [
+        'instance' => $instanceid,
+        'cmid' => $cmid,
+        'recordid' => $recordid,
+    ]
+);
 $PAGE->set_pagelayout('admin');
 $PAGE->set_context($context);
 $PAGE->set_url($url);
