@@ -48,13 +48,18 @@ function local_bbb_lad_extend_settings_navigation(settings_navigation $settingsn
     }
 
     // Check if enabled or data exists.
-    $data = $DB->get_records('bbbext_lad', ['bigbluebuttonbnid' => $PAGE->cm->instance]);
     $instanceid = $PAGE->cm->instance;
-    $record = $DB->get_record('bbbext_lad', ['bigbluebuttonbnid' => $instanceid]);
-    if (!$data) {
-        if (!$record || $record->enabled == 0) {
-            return;
-        }
+    $enabled = $DB->get_record(
+        'bbbext_lad',
+        [
+            'bigbluebuttonbnid' => $instanceid,
+            'enabled' => 1,
+        ]
+    );
+    $data = $DB->get_records('local_bbb_lad', ['bigbluebuttonbnid' => $PAGE->cm->instance]);
+
+    if (!$enabled && empty($data)) {
+        return;
     }
 
     $url = new moodle_url('/local/bbb_lad/viewlad.php', ['cmid' => $PAGE->cm->id]);
