@@ -91,7 +91,7 @@ if (!$recordid && count($records) > 1) {
     // Create table.
     $download = optional_param('download', '', PARAM_ALPHA);
     $table = new flexible_table('local_bbb_lad');
-    $name = 'bbb_leardning_analytics_' . $instanceid;
+    $name = 'bbb_learning_analytics_' . $instanceid;
     $table->is_downloading($download, $name, $name);
 
     // Columns and headers.
@@ -147,11 +147,18 @@ if (!$recordid && count($records) > 1) {
     $record = reset($records);
     $data = json_decode($record->data, true);
     $attendees = $data['data']['attendees'];
+
     foreach ($attendees as $attendee) {
+
+        // Determine if attendee is a guest.
+        $userid = $attendee['ext_user_id'];
+        if (!$DB->record_exists('user', ['id' => $userid])) {
+            $attendee['name'] .= ' (' . get_string('guest') . ')';
+        }
+
         $data = [];
         if ($table->is_downloading()) {
-            $user = \core_user::get_user($attendee['ext_user_id']);
-            $data[] = fullname($user);
+            $data[] = $attendee['name'];
             $data[] = table::format_jl_for_download($attendee['joins']);
             $data[] = table::format_jl_for_download($attendee['leaves']);
         } else {

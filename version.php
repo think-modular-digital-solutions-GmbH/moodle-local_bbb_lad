@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version      = 2026013001;
+$plugin->version      = 2026020201;
 $plugin->requires     = 2021051700;
 $plugin->component    = 'local_bbb_lad';
-$plugin->release      = '1.0.3';
+$plugin->release      = '1.0.4';
 $plugin->maturity     = MATURITY_STABLE;
 $plugin->supports     = [404, 502];
 $plugin->dependencies = [

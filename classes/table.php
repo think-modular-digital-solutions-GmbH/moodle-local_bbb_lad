@@ -47,7 +47,7 @@ class table {
         // Print user link.
         $userid = $attendee['ext_user_id'];
         $user = \core_user::get_user($userid);
-        $username = fullname($user);
+        $username = $attendee['name'];
         $url = new \moodle_url('/user/profile.php', ['id' => $userid]);
         $html = \html_writer::link($url, $username);
         $html = self::joins_and_leaves($html, $attendee);
