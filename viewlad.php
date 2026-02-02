@@ -149,12 +149,7 @@ if (!$recordid && count($records) > 1) {
     $attendees = $data['data']['attendees'];
 
     foreach ($attendees as $attendee) {
-
-        // Determine if attendee is a guest.
-        $userid = $attendee['ext_user_id'];
-        if (!$DB->record_exists('user', ['id' => $userid])) {
-            $attendee['name'] .= ' (' . get_string('guest') . ')';
-        }
+        $attendee['name'] = table::get_attendee_name($attendee);
 
         $data = [];
         if ($table->is_downloading()) {

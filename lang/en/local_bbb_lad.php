@@ -24,6 +24,7 @@
  */
 
 $string['bbb_lad:viewlad'] = 'View BigBlueButton Learning Analytics Dashboard for an activity';
+$string['deleteduser'] = 'deleted user';
 $string['joins'] = 'joined';
 $string['lad'] = 'Learning Analytics Dashboard for {$a}';
 $string['leaves'] = 'left';

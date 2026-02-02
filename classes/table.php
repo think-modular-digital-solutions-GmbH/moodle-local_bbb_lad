@@ -142,4 +142,25 @@ class table {
         }
         return format_time($timeinseconds);
     }
+
+    /**
+     * Gets attendee name.
+     *
+     * @param array $attendee
+     * @return string name
+     */
+    public static function get_attendee_name($attendee) {
+        global $DB;
+
+
+        $userid = $attendee['ext_user_id'];
+        $userrec = $DB->get_record('user', ['id' => $userid]);
+        if (!$userrec) {
+            $attendee['name'] .= ' (' . get_string('guest') . ')';
+        } elseif ($userrec->deleted) {
+            $attendee['name'] = ' [' . get_string('deleteduser', 'local_bbb_lad') . ']';
+        }
+        return $attendee['name'];
+    }
+
 }
