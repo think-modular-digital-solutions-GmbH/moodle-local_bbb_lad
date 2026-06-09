@@ -58,7 +58,7 @@ function local_bbb_lad_extend_settings_navigation(settings_navigation $settingsn
     );
     $data = $DB->get_records('local_bbb_lad', ['bigbluebuttonbnid' => $PAGE->cm->instance]);
 
-    if (!$enabled && empty($data)) {
+    if (!$enabled || empty($data)) {
         return;
     }
 
